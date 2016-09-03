@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TylerCstore</title>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0"/>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script> 
+	   <script src="js/login.js"></script>
+	   	<script>
+					var user_id = localStorage.getItem('user_id');
+					var shopping_item_list = 'itemList'+user_id;
+
+		</script>
+     
+	 
+	 
+        <script src="js/db.js"></script>
+        <script src="js/function.js"></script>
+
+        <script>
+            createDatabase();
+
+
+        </script>
+
+
+
+
+
+    </head>
+    <body>
+        <a id='lnkDialog' href="#dialogebox" data-rel="dialogebox" data-transition="pop" style='display:none;'></a>
+        <a id='lnkDialog2' href="#manual_writing_search_dialogebox" data-rel="manual_writing_search_dialogebox" data-transition="pop" style='display:none;'></a>
+        <a id='lnkDialog3' href="#shoppingcartupdate_dialogebox" data-rel="shoppingcartupdate_dialogebox" data-transition="pop" style='display:none;'></a>
+
+
+
+        <div data-role="page" id="login" data-theme="b">
+            <div data-role="header" data-theme="a">
+                <h3>Login Page</h3>
+            </div>
+
+            <div data-role="content">
+                <form id="check-user" class="ui-body ui-body-a ui-corner-all" data-ajax="false">
+                    <fieldset>
+                        <div data-role="fieldcontain">
+                            <label for="username">Enter your username:</label>
+                            <input type="text" value="" name="username" id="username"/>
+                        </div>                                  
+                        <div data-role="fieldcontain">                                      
+                            <label for="password">Enter your password:</label>
+                            <input type="password" value="" name="password" id="password"/> 
+                        </div>
+                        <input type="button" data-theme="b" name="submit" id="submit" value="Submit">
+                    </fieldset>
+                </form>                              
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+
+            </div>
+        </div>
+
+
+        <!-- second start !-->
+        <div data-role="page" id="second">
+            <div data-theme="a" data-role="header">
+
+                <h3>Dashboard</h3>
+            </div>
+
+            <div data-role="content">
+
+                <p id="store_name"style="text-align:center; margin-left:10px;"></p>
+                <a href="javascript:scan();" style="text-decoration: none"><button>Scan Barcode</button></a>
+                <a href="#machinescan" style="text-decoration: none"><button>Scan Using Reader</button></a>
+                <a href="#manual_writing_search" style="text-decoration: none"><button>Search Product writing </button></a>
+                <a href="#manual_by_type" style="text-decoration: none"><button>Manual add </button></a>
+
+                <a href="#cart" style="text-decoration: none"><button>Display Scanned Data</button></a>
+                <a href="#orderstatus" style="text-decoration: none"><button>Order Status</button></a>
+                <a href="#profile" style="text-decoration: none"><button>My Profile</button></a>
+                <a href="#login" onclick="logout();" style="text-decoration: none"><button>Logout</button></a>
+
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>Page footer</h3>
+            </div>
+        </div>
+        <!-- second end !-->
+
+
+        <!-- Machine Scan start !-->
+        <div data-role="page" id="machinescan">
+            <div data-theme="a" data-role="header">
+                <a href="#second" data-icon="home">Home</a>
+
+                <h3>Scan Using Reader</h3>
+            </div>
+
+            <div data-role="content">
+                <div id="add_product_success_message"></div>
+
+                <label for="search-1">Search:</label>
+                <input type="text" name="barcode_manual" id="barcode_manual" value="" autofocus>
+
+                <p>
+
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>Page footer</h3>
+            </div>
+        </div>
+        <!-- Machine Scan end !-->
+
+
+
+        <!-- manual_writing_search start !-->
+        <div data-role="page" id="manual_writing_search">
+            <div data-theme="a" data-role="header">
+                <a href="#second" data-icon="home">Home</a>
+
+                <h3>Manual Search</h3>
+            </div>
+
+            <div data-role="content">
+
+                <div id="add_product_success_message_mws"></div>
+
+                <label for="search-1">Search by name or item number:</label>
+                <input type="text" placeholder="Search by name or item number" name="manual_writing_search_textbox" id="manual_writing_search_textbox" value="" autofocus>
+                <ul id="manual_writing_search_ul" >
+
+                </ul>    
+
+
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>Page footer</h3>
+            </div>
+        </div>
+        <!-- manual_writing_search End !-->
+
+        
+        
+
+<!-- Pure Manual !-->
+    <div data-role="page" id="manual_by_type">
+        <div data-theme="a" data-role="header">
+			<a href="#second" data-icon="home">Home</a>
+		
+            <h3>Manual By Search</h3>
+        </div>
+ 
+        <div data-role="content">
+		
+			<div id="add_product_success_message_manual"></div>
+			<label for="search-1">Prodcut Name:</label>
+			<input type="text" name="barcode_manual_text" id="barcode_manual_text" value="" autofocus>
+			
+			<label for="search-1">Quantity:</label>
+			<input type="text" name="barcode_manual_text_quantity" id="barcode_manual_text_quantity" value="" autofocus>
+				
+			<a href="#" onclick="addProductbyManual()" data-role="button" data-mini="true">Add Product</a>
+	
+
+
+
+        </div>
+ 
+        <div data-theme="a" data-role="footer" data-position="fixed">
+            <h3>Page footer</h3>
+        </div>
+    </div>
+<!-- Manual By Type Scan end !-->
+	
+
+
+
+
+
+
+	
+        
+
+
+
+        <!-- ManScan start !-->
+        <div data-role="page" id="cart">
+            <div data-theme="a" data-role="header">
+                <a href="#second" data-icon="home">Home</a>
+
+                <h3>Shopping Cart</h3>
+            </div>
+
+            <div data-role="content">
+                <input type=text id="message" name="message" placeholder="Enter any special message">
+                <input type=button name="submit" onclick="placeOrder();" value="Place Order">
+                <br/>
+                <h3 align=center> Order Item</h3>
+                <ul data-role="listview"  id="contributionList" data-filter="true" data-filter-placeholder="Find Product..." data-filter-theme="b" data-inset="true">
+                </ul>
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>Page footer</h3>
+            </div>
+        </div>
+        <!-- Machine Scan end !-->
+
+
+
+
+
+
+
+        <!-- Diaglogebox !-->
+        <div data-role="page" id="dialogebox" >
+            <div data-theme="a" data-role="header">
+                <h3>Product Found</h3>
+            </div>
+
+            <div data-role="content">
+                <p id="dlg_product_name_text"></p>
+
+                <input type="hidden" name="dlg_productid" id="dlg_productid">
+                <input type="hidden" name="dlg_itemnumber" id="dlg_itemnumber">
+                <input type="hidden" name="dlg_productname" id="dlg_productname">
+
+
+                <input type="number" name="dlg_quantity"  id="dlg_quantity" pattern="[0-9]*" autofocus>
+                <a href="#" onclick="addProduct();" data-role="button" data-rel="back" >Add Product</a>
+
+                <a href="#" data-rel="back" data-role="button" data-rel="back">Close</a>
+                <br/>
+            </div>
+        </div>
+
+
+            <!-- Diaglogebox manual_writing_search_dialogebox !-->
+            <div data-role="page" id="manual_writing_search_dialogebox" >
+                <div data-theme="a" data-role="header">
+                    <h3>Product Found(Manual)</h3>
+                </div>
+
+                <div data-role="content">
+                    <p id="dlg_mws_product_name_text"></p>
+
+                    <input type="hidden" name="dlg_mws_productid" id="dlg_mws_productid">
+                    <input type="hidden" name="dlg_mws_itemnumber" id="dlg_mws_itemnumber">
+                    <input type="hidden" name="dlg_mws_productname" id="dlg_mws_productname">
+
+
+                    <input type="number" name="dlg_mws_quantity"  id="dlg_mws_quantity" pattern="[0-9]*" autofocus>
+                    <a href="#" onclick="addProductmws();" data-role="button" data-rel="back" >Add Product</a>
+
+                    <a href="#" data-rel="back" data-role="button" data-rel="back">Close</a>
+                    <br/>
+                </div>
+            </div>
+            <!-- Diaglogebox !-->
+
+            
+            
+                <!-- Diaglogebox !-->
+        <div data-role="page" id="shoppingcartupdate_dialogebox" >
+            <div data-theme="a" data-role="header">
+                <h3>Product Found</h3>
+            </div>
+
+            <div data-role="content">
+			    <p id="dlg_shoppingcartupdate_msg"></p>
+
+                <p id="dlg_shoppingcartupdate_text"></p>
+
+                <input type="hidden" name="dlg_rowid" id="dlg_rowid">
+            
+                <input type="number" name="dlg_shoppingcartupdate_quantity"  id="dlg_shoppingcartupdate_quantity" pattern="[0-9]*" autofocus>
+                 <a href="#" onclick="updateProductquantity();" data-role="button" data-rel="back" >Update Product</a>
+                 <a href="#"  onclick="deleteorderitem();" data-role="button" data-rel="back" >Delete Product</a>
+                 <a href="#" data-rel="back" data-role="button" data-rel="back">Close</a>
+                <br/>
+            </div>
+        </div>
+
+                <!---Delete & Update !-->
+                
+
+
+            <script type="text/javascript" src="cordova.js"></script>
+            <script>
+
+    //Scanning Start		
+                        function scan()
+                        {
+                            cordova.plugins.barcodeScanner.scan(
+                                    function (result) {
+                                        if (!result.cancelled)
+                                        {
+
+
+                                            var retrievedObject = localStorage.getItem('newdatabase');
+                                            var rows = JSON.parse(retrievedObject);
+                                            var rowscount = rows.length;
+                                            var colbarcode = "";
+                                            var barcode = result.text;
+                                            //To match 0 00 barcode
+                                            var barcode2 = "0" + barcode;
+                                            var barcode3 = "00" + barcode;
+
+                                            for (i = 0; i < rowscount; i++)
+                                            {
+                                                if ((rows[i].barcode == barcode) || (rows[i].upc == barcode) || (rows[i].barcode == barcode2) || (rows[i].upc == barcode2) || (rows[i].barcode == barcode3) || (rows[i].upc == barcode3))
+                                                {
+
+                                                    var productid = rows[i].id;
+                                                    var itemnumber = rows[i].item_number;
+                                                    var productname = rows[i].name;
+
+                                                    $("#dlg_productid").val(productid);
+                                                    $("#dlg_productname").val(productname);
+                                                    $("#dlg_itemnumber").val(itemnumber);
+                                                    $("#dlg_product_name_text").html(productname);
+                                                    $("#dlg_quantity").val(1);
+
+                                                    $("#lnkDialog").click();
+                                                    $('#barcode_manual').val("");
+                                                    document.getElementById("barcode_manual").focus();
+
+                                                }
+                                            }
+                                        }
+                                    },
+                                    function (error) {
+                                        alert("Scanning failed: " + error);
+                                    }
+                            );
+                        }
+
+
+
+
+                        /***********manual_writing_search***********************/
+
+
+                        $('#manual_writing_search_textbox').bind("input propertychange", function (e) {
+                            var manual_writing_search_textbox = document.getElementById("manual_writing_search_textbox").value;
+                            if (manual_writing_search_textbox.length > 3)
+                                $("#manual_writing_search_ul").html("");
+                            $.getJSON("http://tylercstore.com/manuallist.php?q=" + manual_writing_search_textbox, function (data) {
+                                var items = [];
+                                $.each(data, function (key, val)
+                                {
+                                    var aa = "<li><a href='' onclick=\"manual_writing_search_dialogue('" + val.name + "','" + val.id + "','" + val.item_number + "');\">" + val.name + "</a></li>";
+                                    $("#manual_writing_search_ul").append(aa);
+                                });
+
+                            });
+
+
+                        }
+                        );
+
+
+                        function manual_writing_search_dialogue(productname, productid, itemnumber)
+                        {
+
+                            $("#dlg_mws_productid").val(productid);
+                            $("#dlg_mws_productname").val(productname);
+                            $("#dlg_mws_itemnumber").val(itemnumber);
+                            $("#dlg_mws_product_name_text").html(productname);
+                            $("#dlg_mws_quantity").val(1);
+                            $("#lnkDialog2").click();
+                            $('#manual_writing_search_textbox').val("");
+                            document.getElementById("manual_writing_search_textbox").focus();
+
+
+                        }
+
+
+                        function addProductmws()
+                        {
+                            var productid = $("#dlg_mws_productid").val();
+                            var productname = $("#dlg_mws_productname").val();
+                            var itemnumber = $("#dlg_mws_itemnumber").val();
+                            var quantity = $("#dlg_mws_quantity").val();
+						     addItem(productid, productname, itemnumber, quantity);
+					-		$('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_mws').delay(1000).fadeOut();
+
+                        }
+
+
+                        /*************manual_writing_search********************/
+
+
+
+
+
+                        $(document).on('pageshow', '#machinescan', function () {
+                            $("#barcode_manual").focus();
+                        });
+
+                        /**********BARCODE MANUAL ***********/
+                        /*	
+                         $('#barcode_manual').on('paste', function (e) {
+                         if (e.originalEvent.clipboardData) {
+                         var text = e.originalEvent.clipboardData.getData("text/plain");
+                         matchBarcode(text);
+                         }
+                         });*/
+
+
+                        $('#barcode_manual').bind("input propertychange", function (e) {
+                            var barcode = document.getElementById("barcode_manual").value;
+                            if (barcode.length > 3)
+                            {
+                                matchBarcode(barcode);
+                            }
+                        }
+                        );
+
+                        /***********BARCODE MANUAL*************/
+                        
+                        
+                        
+function addProductbyManual () 
+	{
+	var productid 		    = '0';
+	var itemnumber          = '0';
+	var productname			= $("#barcode_manual_text").val();
+	var quantity		    = $("#barcode_manual_text_quantity").val();
+	addItem(productid, productname, itemnumber, quantity);
+	$('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_manual').delay(500).fadeOut();
+	
+};
+
+
+/**************Cart****************/
+//Show Ordered List
+            $(document).on("pagebeforeshow", "#cart", function() {
+             showOrderList();
+
+            });
+            
+			
+			 $(document).on("pagebeforeshow", "#second", function() {
+				var store_name = localStorage.getItem('store_name');
+				var sessionid = localStorage.getItem('sessionid');
+				$("#store_name").html(store_name);
+				
+												var user_id = localStorage.getItem('user_id');
+								var shopping_item_list = 'itemList'+user_id;
+
+				
+				
+				checkLogin();
+				
+            });
+            
+			
+/**************************Session Check**************/
+function checkLogin()
+{
+var sessionid = localStorage.getItem('sessionid');
+if(sessionid =="LOGOUT")	
+{
+                                $.mobile.changePage("#login");                         
+
+}
+
+}			
+            
+            
+            
+            
+            
+                        function placeOrder()
+                        {
+						
+														var user_id = localStorage.getItem('user_id');
+								var shopping_item_list = 'itemList'+user_id;
+
+								
+								
+                            var message = $("#message").value;
+
+                            $.getJSON("http://www.bdchatsites.com/data.php?callback=?&jsonValue=" + localStorage.getItem(shopping_item_list) + "&message=" + message, function (data) {
+                                if (data.status == true)
+                                {
+                                    localStorage.removeItem(shopping_item_list);
+                                    $('#contributionList').empty().listview('refresh');
+                                    alert("Succesfully Product submiteed.");
+                                }
+                            });
+                        }
+
+
+
+            
+/*************Cart********************/
+
+/*************LOGOUT******************/
+
+
+function logout()
+{
+var sessionid = localStorage.getItem('sessionid');
+$.getJSON("http://tylercstore.com/project/scan/action.php?action=logout&sessionid=" + sessionid, function (data) {});
+localStorage.setItem('sessionid','LOGOUT');
+}
+
+/***********LOGOUT*********************/
+
+
+
+
+
+            </script>
+
+
+
+    </body>
+</html>
