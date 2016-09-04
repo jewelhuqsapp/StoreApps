@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
- 
+
 
 var user_id = localStorage.getItem('user_id');
-var shopping_item_list = 'itemList'+user_id;
+var shopping_item_list = 'itemList' + user_id;
 
 
 function matchBarcode(barcode)
@@ -20,6 +20,8 @@ function matchBarcode(barcode)
 
     var barcode2 = "0" + barcode;
     var barcode3 = "00" + barcode;
+	
+	var productfound =0;
 
     for (i = 0; i < rowscount; i++)
     {
@@ -38,26 +40,29 @@ function matchBarcode(barcode)
             $("#lnkDialog").click();
             $('#barcode_manual').val("");
             document.getElementById("barcode_manual").focus();
-
-
-
-
+			productfound=1;
             break;
         }
 
 
     }
+	if(productfound==0)
+	{
+	$('<div class=\"alert alert-warning\">   Item Not Found.</div>').insertBefore('#add_product_success_message').delay(500).fadeOut();
+
+		
+	}
 
 }
 
 /***Adding Item***********/
 var addItem = function (id, name, itemnumber, quantity)
 {
-			var user_id = localStorage.getItem('user_id');
-			var shopping_item_list = 'itemList'+user_id;
+    var user_id = localStorage.getItem('user_id');
+    var shopping_item_list = 'itemList' + user_id;
 
-					
-					
+
+
     var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
 
     var newItem =
@@ -76,11 +81,11 @@ var addItem = function (id, name, itemnumber, quantity)
 
 function addProduct()
 {
-    productid   = $("#dlg_productid").val();
+    productid = $("#dlg_productid").val();
     productname = $("#dlg_productname").val();
-    itemnumber  =  $("#dlg_itemnumber").val();
-    quantity 	= $("#dlg_quantity").val();
-	addItem(productid, productname, itemnumber, quantity);
+    itemnumber = $("#dlg_itemnumber").val();
+    quantity = $("#dlg_quantity").val();
+    addItem(productid, productname, itemnumber, quantity);
     $('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message').delay(500).fadeOut();
 
 }
@@ -104,8 +109,8 @@ function addProductToCart()
 
 function showOrderList()
 {
-								var user_id = localStorage.getItem('user_id');
-								var shopping_item_list = 'itemList'+user_id;
+    var user_id = localStorage.getItem('user_id');
+    var shopping_item_list = 'itemList' + user_id;
 
 
 
@@ -114,76 +119,91 @@ function showOrderList()
 
 
 
-$('#contributionList').empty();
+    $('#contributionList').empty();
     for (i = 0; i < ItemCount; i++)
     {
-		var text = "'"+i+"','"+oldItems[i].name+"','"+oldItems[i].quantity+"','"+oldItems[i].itemnumer+"'";
+        var text = "'" + i + "','" + oldItems[i].name + "','" + oldItems[i].quantity + "','" + oldItems[i].itemnumer + "'";
 
-        $('#contributionList').append('<li><a onclick="orderDetails('+text+')"><h3>' + oldItems[i].name + '</h3> Quantity: ' + oldItems[i].quantity + '</a></li>').listview('refresh');
+        $('#contributionList').append('<li><a onclick="orderDetails(' + text + ')"><h3>' + oldItems[i].name + '</h3> Quantity: ' + oldItems[i].quantity + '</a></li>').listview('refresh');
     }
 }
 
-function orderDetails(rowid,product_name,product_quantity,itemnumber)
-    {
-		$("#dlg_shoppingcartupdate_text").html(product_name);
-		$("#dlg_shoppingcartupdate_quantity").val(product_quantity);
-		$("#dlg_rowid").val(rowid);
-		$("#lnkDialog3").click();
+function orderDetails(rowid, product_name, product_quantity, itemnumber)
+{
+    $("#dlg_shoppingcartupdate_text").html(product_name);
+    $("#dlg_shoppingcartupdate_quantity").val(product_quantity);
+    $("#dlg_rowid").val(rowid);
+    $("#lnkDialog3").click();
 
-        
-    }
+
+}
 function deleteorderitem()
 {
-									var user_id = localStorage.getItem('user_id');
-								var shopping_item_list = 'itemList'+user_id;
+    var user_id = localStorage.getItem('user_id');
+    var shopping_item_list = 'itemList' + user_id;
 
-								
-	    var rowid= $("#dlg_rowid").val();
-			rowid =parseInt(rowid);
-		var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
-		var ItemCount = oldItems.length;
-	
-		
-		
-		for (i = 0; i < ItemCount; i++)
-		{
-			if (i == rowid) {oldItems.splice(i,1);  	break;
-			}
-		}
-		
-	 localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
 
-	 showOrderList();
+    var rowid = $("#dlg_rowid").val();
+    rowid = parseInt(rowid);
+    var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
+    var ItemCount = oldItems.length;
+
+
+
+    for (i = 0; i < ItemCount; i++)
+    {
+        if (i == rowid) {
+            oldItems.splice(i, 1);
+            break;
+        }
+    }
+
+    localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
+
+    showOrderList();
+
+
+
+}
+
+// clearCart
+
+function clearCart()
+{
+    var user_id = localStorage.getItem('user_id');
+    var shopping_item_list = 'itemList' + user_id;
+	localStorage.setItem(shopping_item_list, 'null');
+    showOrderList();
+
 	
-	
-	
-}	
+}
 
 function updateProductquantity()
 {
-									var user_id = localStorage.getItem('user_id');
-								var shopping_item_list = 'itemList'+user_id;
-
-								
-		    var rowid= $("#dlg_rowid").val();
-			var quantity =$("#dlg_shoppingcartupdate_quantity").val();
-			rowid =parseInt(rowid);
-			
-			var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
-			var ItemCount = oldItems.length;
-	
-		for (i = 0; i < ItemCount; i++)
-		{
-			if (i == rowid) 
-			{
-				oldItems[i].quantity=quantity;  	break;
-			}
-		}
-		
-	 localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
-	 showOrderList();
+    var user_id = localStorage.getItem('user_id');
+    var shopping_item_list = 'itemList' + user_id;
 
 
-			
+    var rowid = $("#dlg_rowid").val();
+    var quantity = $("#dlg_shoppingcartupdate_quantity").val();
+    rowid = parseInt(rowid);
+
+    var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
+    var ItemCount = oldItems.length;
+
+    for (i = 0; i < ItemCount; i++)
+    {
+        if (i == rowid)
+        {
+            oldItems[i].quantity = quantity;
+            break;
+        }
+    }
+
+    localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
+    showOrderList();
+
+
+
 
 }

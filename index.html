@@ -195,6 +195,9 @@
                 <a href="#second" data-icon="home">Home</a>
 
                 <h3>Shopping Cart</h3>
+				<a href="#clearall_dialogebox"  data-rel="dialogebox" data-transition="pop"  data-icon="delete">Clear All Item</a>
+								
+
             </div>
 
             <div data-role="content">
@@ -266,6 +269,25 @@
 
             
             
+			  <div data-role="page" id="clearall_dialogebox" >
+            <div data-theme="a" data-role="header">
+                <h3>Are you Sure?</h3>
+            </div>
+
+            <div data-role="content">
+				<p>You want to delete all item from your item</p>
+                <input type="hidden" name="dlg_rowid" id="dlg_rowid">
+            
+                 <a href="#" onclick="clearCart();" data-role="button" data-rel="back" >Yes</a>
+                 <a href="#"  onclick="deleteorderitem();" data-role="button" data-rel="back" >No</a>
+                <br/>
+            </div>
+        </div>
+
+		
+		
+			
+			
                 <!-- Diaglogebox !-->
         <div data-role="page" id="shoppingcartupdate_dialogebox" >
             <div data-theme="a" data-role="header">
@@ -311,7 +333,7 @@
                                             //To match 0 00 barcode
                                             var barcode2 = "0" + barcode;
                                             var barcode3 = "00" + barcode;
-
+											var productfound = 0;	
                                             for (i = 0; i < rowscount; i++)
                                             {
                                                 if ((rows[i].barcode == barcode) || (rows[i].upc == barcode) || (rows[i].barcode == barcode2) || (rows[i].upc == barcode2) || (rows[i].barcode == barcode3) || (rows[i].upc == barcode3))
@@ -330,9 +352,15 @@
                                                     $("#lnkDialog").click();
                                                     $('#barcode_manual').val("");
                                                     document.getElementById("barcode_manual").focus();
+													productfound=1;
+													break;
 
                                                 }
                                             }
+											if(productfound==0)
+											{
+											alert("product not found");
+											}
                                         }
                                     },
                                     function (error) {
@@ -350,6 +378,7 @@
                         $('#manual_writing_search_textbox').bind("input propertychange", function (e) {
                             var manual_writing_search_textbox = document.getElementById("manual_writing_search_textbox").value;
                             if (manual_writing_search_textbox.length > 3)
+                            {
                                 $("#manual_writing_search_ul").html("");
                             $.getJSON("http://tylercstore.com/manuallist.php?q=" + manual_writing_search_textbox, function (data) {
                                 var items = [];
@@ -361,9 +390,8 @@
 
                             });
 
-
-                        }
-                        );
+                            }
+                        });
 
 
                         function manual_writing_search_dialogue(productname, productid, itemnumber)
