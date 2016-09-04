@@ -312,6 +312,13 @@
                 <!---Delete & Update !-->
                 
 
+             
+            
+
+
+
+
+
 
             <script type="text/javascript" src="cordova.js"></script>
             <script>
@@ -416,8 +423,12 @@
                             var productname = $("#dlg_mws_productname").val();
                             var itemnumber = $("#dlg_mws_itemnumber").val();
                             var quantity = $("#dlg_mws_quantity").val();
-						     addItem(productid, productname, itemnumber, quantity);
-					-		$('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_mws').delay(1000).fadeOut();
+					        addItem(productid, productname, itemnumber, quantity);
+							 if(product_added==1)
+							 {
+						 $('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_mws').delay(3000).fadeOut();
+							 }
+							 
 
                         }
 
@@ -462,7 +473,10 @@ function addProductbyManual ()
 	var productname			= $("#barcode_manual_text").val();
 	var quantity		    = $("#barcode_manual_text_quantity").val();
 	addItem(productid, productname, itemnumber, quantity);
-	$('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_manual').delay(500).fadeOut();
+	if(product_added==1)
+	{
+	$-('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_manual').delay(3500).fadeOut();
+	}
 	
 };
 
@@ -509,14 +523,22 @@ if(sessionid =="LOGOUT")
                         function placeOrder()
                         {
 						
-														var user_id = localStorage.getItem('user_id');
+								var user_id = localStorage.getItem('user_id');
 								var shopping_item_list = 'itemList'+user_id;
+                                var rows =localStorage.getItem(shopping_item_list);
+
+                                if(rows=== null)
+                                {
+                                    alert("Your Cart is empty");
+                                }
+                                else
+                                {
 
 								
 								
-                            var message = $("#message").value;
+                            var message =  encodeURIComponent($("#message").value);
 
-                            $.getJSON("http://www.bdchatsites.com/data.php?callback=?&jsonValue=" + localStorage.getItem(shopping_item_list) + "&message=" + message, function (data) {
+                            $.getJSON("http://www.bdchatsites.com/data.php?callback=?&jsonValue=" +  encodeURIComponent(localStorage.getItem(shopping_item_list)) + "&message=" + message, function (data) {
                                 if (data.status == true)
                                 {
                                     localStorage.removeItem(shopping_item_list);
@@ -524,6 +546,8 @@ if(sessionid =="LOGOUT")
                                     alert("Succesfully Product submiteed.");
                                 }
                             });
+                        }
+
                         }
 
 
@@ -542,7 +566,6 @@ localStorage.setItem('sessionid','LOGOUT');
 }
 
 /***********LOGOUT*********************/
-
 
 
 

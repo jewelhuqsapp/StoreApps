@@ -7,6 +7,7 @@
 
 var user_id = localStorage.getItem('user_id');
 var shopping_item_list = 'itemList' + user_id;
+var product_added =0;
 
 
 function matchBarcode(barcode)
@@ -56,14 +57,30 @@ function matchBarcode(barcode)
 }
 
 /***Adding Item***********/
+
 var addItem = function (id, name, itemnumber, quantity)
 {
     var user_id = localStorage.getItem('user_id');
     var shopping_item_list = 'itemList' + user_id;
+    /****Quantity Validation***/
+	var quantity=parseInt(quantity);
+	if(quantity==0 || quantity<1)
+	{
+		alert("Incorrect Quantity");
+		product_added=0;
 
+		
+	}
+    else if(quantity>10)
+    {
+        var prompt = confirm("Are you sure you want to add "+quantity+" quantity?");
+        if(prompt)
+        {
 
+            /***********/
 
     var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
+    product_added=1;
 
     var newItem =
             {
@@ -76,6 +93,35 @@ var addItem = function (id, name, itemnumber, quantity)
     oldItems.push(newItem);
     localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
 
+            /**********/
+        }
+        else
+        {
+                    product_added=0;
+
+        }
+    }
+	else
+	{
+		
+		
+      
+
+    var oldItems = JSON.parse(localStorage.getItem(shopping_item_list)) || [];
+	product_added=1;
+
+    var newItem =
+            {
+                'id': id,
+                'name': name,
+                'itemnumber': itemnumber,
+                'quantity': quantity,
+            };
+
+    oldItems.push(newItem);
+    localStorage.setItem(shopping_item_list, JSON.stringify(oldItems));
+	}
+
 };
 
 
@@ -86,7 +132,10 @@ function addProduct()
     itemnumber = $("#dlg_itemnumber").val();
     quantity = $("#dlg_quantity").val();
     addItem(productid, productname, itemnumber, quantity);
-    $('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message').delay(500).fadeOut();
+	if(product_added==1)
+	{
+    $('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message').delay(3500).fadeOut();
+	}
 
 }
 
