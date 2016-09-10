@@ -256,3 +256,98 @@ function updateProductquantity()
 
 
 }
+
+
+/***************DATA UPDATE*******************/
+function getLastItemID()
+{
+	    var retrievedObject = localStorage.getItem('newdatabase');
+		localStorage.setItem("totalproduct",retrievedObject.length);
+		return retrievedObject.length;
+}
+
+var myVar;
+function updateDatabase()
+{ 
+
+
+
+											var retrievedObject = localStorage.getItem('newdatabase');
+                                            var rows = JSON.parse(retrievedObject);
+                                            var start = rows.length;
+											
+											
+ 
+						var dataFound=0;
+                            $.getJSON("http://tylercstore.com/updateapps.php?start="+start+"&sessionid="+ localStorage.getItem('sessionid'), function (data) {
+                                var items = [];
+                                $.each(data, function (key, val)
+                                {
+									
+									var newItem =
+												{
+													'id': val.id,
+													'name': val.name,
+													'item_number': val.item_number,
+													'barcode': val.barcode,
+													'upc' :val.upc
+												};
+
+												rows.push(retrievedObject);
+    
+	
+	
+									
+                                });
+
+								dataFound=1;
+                            });
+							
+								localStorage.setItem('newdatabase', JSON.stringify(retrievedObject));
+	
+							
+							 var retrievedObject = localStorage.getItem('newdatabase');
+                                            var rows = JSON.parse(retrievedObject);
+                                            var start = rows.length;
+		
+		
+		
+							
+
+
+					$("#updateStatus").html("Current Total Item:<b>"+start+"</b>");
+					if(dataFound==0)
+					{
+						        clearInterval(myVar);
+								                            $("#updateStatus").html("Current Total Item:<b>"+start+"</b>");
+
+								$("#updateStatus").html("<p>Update Completed.</p>");
+	
+								return;
+
+					}
+
+ }
+ 
+ function updateOldDB()
+ {
+	 updateDatabase();
+	// myVar = setInterval(updatedatabase, 3000);
+	 
+	   
+
+ }
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+

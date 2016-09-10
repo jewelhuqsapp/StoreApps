@@ -80,6 +80,7 @@
 
                 <a href="#cart" style="text-decoration: none"><button>Display Scanned Data</button></a>
                 <a href="#orderstatus" style="text-decoration: none"><button>Order Status</button></a>
+				<a href="#updatedatabase"  style="text-decoration: none"><button>Update Database</button></a>
                 <a href="#profile" style="text-decoration: none"><button>My Profile</button></a>
                 <a href="#login" onclick="logout();" style="text-decoration: none"><button>Logout</button></a>
 
@@ -216,6 +217,31 @@
         <!-- Machine Scan end !-->
 
 
+		
+		   <!-- Update Database start !-->
+        <div data-role="page" id="updatedatabase">
+            <div data-theme="a" data-role="header">
+                <a href="#second" data-icon="home">Home</a>
+
+                <h3>Database Update</h3>
+								
+
+            </div>
+
+            <div data-role="content">
+			<p id="updateStatus"></p>
+                <input type=button name="submit" onclick="updateOldDB();" value="Update Database">
+                <br/>
+                
+            </div>
+
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>Page footer</h3>
+            </div>
+        </div>
+        <!-- UpdateDatabse end !-->
+		
+		
 
 
 
@@ -431,6 +457,8 @@
 							 
 
                         }
+						
+						
 
 
                         /*************manual_writing_search********************/
@@ -443,6 +471,20 @@
                             $("#barcode_manual").focus();
                         });
 
+						
+						
+                        $(document).on('pageshow', '#updatedatabase', function () {
+						   var retrievedObject = localStorage.getItem('newdatabase');
+                                            var rows = JSON.parse(retrievedObject);
+                                            var rowscount = rows.length;
+                                         
+										 
+										 
+                            $("#updateStatus").html("Current Total Item:<b>"+rowscount+"</b>");
+                        });
+
+						
+						
                         /**********BARCODE MANUAL ***********/
                         /*	
                          $('#barcode_manual').on('paste', function (e) {
