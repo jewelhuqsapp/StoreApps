@@ -259,12 +259,6 @@ function updateProductquantity()
 
 
 /***************DATA UPDATE*******************/
-function getLastItemID()
-{
-	    var retrievedObject = localStorage.getItem('newdatabase');
-		localStorage.setItem("totalproduct",retrievedObject.length);
-		return retrievedObject.length;
-}
 
 var myVar;
 function updateDatabase()
@@ -276,6 +270,18 @@ function updateDatabase()
                                             var rows = JSON.parse(retrievedObject);
                                             var start = rows.length;
 											
+											
+											
+											/***/
+											
+											    var oldItems = JSON.parse(localStorage.getItem('newdatabase')) || [];
+    product_added=1;
+
+    
+
+
+	
+	
 											
  
 						var dataFound=0;
@@ -293,35 +299,35 @@ function updateDatabase()
 													'upc' :val.upc
 												};
 
-												rows.push(retrievedObject);
-    
-	
-	
+												oldItems.push(newItem);
+												localStorage.setItem('newdatabase', JSON.stringify(oldItems));
+
+									dataFound=1;
+
 									
                                 });
 
-								dataFound=1;
                             });
 							
-								localStorage.setItem('newdatabase', JSON.stringify(retrievedObject));
+
+							
 	
 							
 							 var retrievedObject = localStorage.getItem('newdatabase');
                                             var rows = JSON.parse(retrievedObject);
                                             var start = rows.length;
-		
+
 		
 		
 							
 
 
-					$("#updateStatus").html("Current Total Item:<b>"+start+"</b>");
+					$("#updateStatus").append("Current Total Item:<b>"+start+"</b><br>");
 					if(dataFound==0)
 					{
 						        clearInterval(myVar);
-								                            $("#updateStatus").html("Current Total Item:<b>"+start+"</b>");
-
-								$("#updateStatus").html("<p>Update Completed.</p>");
+							 $("#updateStatus").append("Current Total Item:<b>"+start+"</b>");
+							$("#updateStatus").append("<p>Update Completed.</p>");
 	
 								return;
 
@@ -332,7 +338,7 @@ function updateDatabase()
  function updateOldDB()
  {
 	 updateDatabase();
-	// myVar = setInterval(updatedatabase, 3000);
+	myVar = setInterval(updatedatabase, 10000);
 	 
 	   
 
