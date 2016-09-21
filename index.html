@@ -517,7 +517,8 @@ function addProductbyManual ()
 	addItem(productid, productname, itemnumber, quantity);
 	if(product_added==1)
 	{
-	$-('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_manual').delay(3500).fadeOut();
+	
+	$('<div class=\"alert alert-success\">  <strong>Success!</strong> Successfully Product Added.</div>').insertBefore('#add_product_success_message_manual').delay(3500).fadeOut();
 	}
 	
 };
@@ -568,6 +569,8 @@ if(sessionid =="LOGOUT")
 								var user_id = localStorage.getItem('user_id');
 								var shopping_item_list = 'itemList'+user_id;
                                 var rows =localStorage.getItem(shopping_item_list);
+								var sessionid = localStorage.getItem('sessionid');
+
 
                                 if(rows=== null)
                                 {
@@ -578,9 +581,9 @@ if(sessionid =="LOGOUT")
 
 								
 								
-                            var message =  encodeURIComponent($("#message").value);
+                            var message =  encodeURIComponent($("#message").val());
 
-                            $.getJSON("http://www.bdchatsites.com/data.php?callback=?&jsonValue=" +  encodeURIComponent(localStorage.getItem(shopping_item_list)) + "&message=" + message, function (data) {
+                            $.getJSON("http://www.bdchatsites.com/veera/data.php?callback=?&jsonValue="+ encodeURIComponent(localStorage.getItem(shopping_item_list)) + "&message=" + message+"&user_id="+user_id+"&sessionid="+sessionid, function (data) {
                                 if (data.status == true)
                                 {
                                     localStorage.removeItem(shopping_item_list);
@@ -594,6 +597,7 @@ if(sessionid =="LOGOUT")
 
 
 
+            
             
 /*************Cart********************/
 
